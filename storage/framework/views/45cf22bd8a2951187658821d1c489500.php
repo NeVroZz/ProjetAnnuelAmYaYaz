@@ -1,10 +1,8 @@
 <style>
-    /* Supprime les grandes flèches */
     .pagination svg {
         display: none !important;
     }
     
-    /* Améliore la pagination */
     .pagination {
         justify-content: center;
     }

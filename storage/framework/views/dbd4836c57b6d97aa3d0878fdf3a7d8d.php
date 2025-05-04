@@ -1,31 +1,25 @@
 
 
-<?php $__env->startSection('content'); ?>
-<div class="container mt-4">
-    <h2 class="mb-4 text-center">Liste des Utilisateurs</h2>
+<?php $__env->startSection('title', 'User Management'); ?>
 
-    <!-- Barre de recherche -->
-    <div class="d-flex justify-content-center mb-3">
-        <form method="GET" action="<?php echo e(route('utilisateurs.index')); ?>" class="d-flex w-50">
-            <input type="text" name="search" value="<?php echo e(request('search')); ?>" placeholder="Rechercher..." class="form-control me-2">
-            <button type="submit" class="btn btn-primary">Rechercher</button>
+<?php $__env->startSection('content'); ?>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>User Management</h2>
+        <form method="GET" action="<?php echo e(route('utilisateurs.index')); ?>" class="d-flex" role="search">
+            <input type="text" name="search" class="form-control me-2" placeholder="Search users..." value="<?php echo e(request('search')); ?>">
+            <button class="btn btn-primary">Apply Filters</button>
         </form>
     </div>
-    <!-- Pagination centrée propre -->
-    <div class="d-flex justify-content-center mt-3">
-        <?php echo $utilisateurs->onEachSide(1)->links('pagination::bootstrap-5'); ?>
 
-    </div>
-    <!-- Tableau des utilisateurs -->
-    <div class="table-responsive">
-        <table class="table table-striped table-hover text-center">
-            <thead class="table-dark">
+    <div class="table-responsive bg-white p-3 rounded shadow-sm">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
                 <tr>
                     <th>ID</th>
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Email</th>
-                    <th>Type</th>
+                    <th>Rôle</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -36,27 +30,40 @@
                     <td><?php echo e($utilisateur->nom); ?></td>
                     <td><?php echo e($utilisateur->prenom); ?></td>
                     <td><?php echo e($utilisateur->email); ?></td>
-                    <td><span class="badge bg-info text-dark"><?php echo e(ucfirst($utilisateur->type_utilisateur)); ?></span></td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-warning">Modifier</a>
-                        <form action="<?php echo e(route('utilisateurs.destroy', $utilisateur->id_utilisateur)); ?>" method="POST" class="d-inline">
-                            <?php echo csrf_field(); ?>
-                            <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</button>
-                        </form>
+                        <span class="badge bg-<?php echo e($utilisateur->type_utilisateur === 'admin' ? 'danger' :
+                            ($utilisateur->type_utilisateur === 'client' ? 'primary' :
+                            ($utilisateur->type_utilisateur === 'commercant' ? 'warning' :
+                            ($utilisateur->type_utilisateur === 'livreur' ? 'success' : 'info')))); ?> badge-role">
+                            <?php echo e(ucfirst($utilisateur->type_utilisateur)); ?>
+
+                        </span>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Modifier</a></li>
+                                <li><form action="<?php echo e(route('utilisateurs.destroy', $utilisateur->id_utilisateur)); ?>" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?')">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
+                                    <button class="dropdown-item text-danger">Supprimer</button>
+                                </form></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>
         </table>
-    </div>
 
-    <!-- Pagination centrée -->
-    <div class="d-flex justify-content-center mt-3">
-        <?php echo $utilisateurs->links('pagination::bootstrap-5'); ?>
+        <div class="mt-3 d-flex justify-content-center">
+            <?php echo e($utilisateurs->links('pagination::bootstrap-5')); ?>
 
+        </div>
     </div>
-</div>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\code\test\resources\views/utilisateurs/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\code\test\resources\views/utilisateurs/index.blade.php ENDPATH**/ ?>

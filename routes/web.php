@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\UtilisateurController;
 
 /*
@@ -18,7 +18,7 @@ use App\Http\Controllers\UtilisateurController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return view('welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -27,8 +27,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('dashboard');
+})->middleware('auth')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,4 +39,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/utilisateurs', [UtilisateurController::class, 'index'])->name('utilisateurs.index');
 Route::delete('/utilisateurs/{id}', [UtilisateurController::class, 'destroy'])->name('utilisateurs.destroy');
 
-require __DIR__.'/auth.php';
+// Authentification classique
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Commenté car on n'utilise plus les routes Inertia d'authentification
+// require __DIR__.'/auth.php';
