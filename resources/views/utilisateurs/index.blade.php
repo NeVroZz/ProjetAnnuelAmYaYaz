@@ -46,7 +46,7 @@
                                 Actions
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Modifier</a></li>
+                                <li><a class="dropdown-item" href="{{ route('utilisateurs.edit', $utilisateur->id_utilisateur) }}">Modifier</a></li>
                                 <li><form action="{{ route('utilisateurs.destroy', $utilisateur->id_utilisateur) }}" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?')">
                                     @csrf
                                     @method('DELETE')
