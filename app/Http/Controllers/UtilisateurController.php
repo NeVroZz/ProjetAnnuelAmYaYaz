@@ -65,5 +65,15 @@ class UtilisateurController extends Controller
         return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
     }
 
+    public function toggleActivation($id)
+    {
+        $user = Utilisateur::findOrFail($id);
+        $user->actif = !$user->actif;
+        $user->save();
+
+        return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
+    }
+
+
 
 }

@@ -48,5 +48,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/utilisateurs/{id}/edit', [UtilisateurController::class, 'edit'])->name('utilisateurs.edit');
 Route::put('/utilisateurs/{id}', [UtilisateurController::class, 'update'])->name('utilisateurs.update');
 
+Route::patch('/utilisateurs/{id}/activation', [UtilisateurController::class, 'toggleActivation'])->name('utilisateurs.toggle');
+
 // Commenté car on n'utilise plus les routes Inertia d'authentification
 // require __DIR__.'/auth.php';

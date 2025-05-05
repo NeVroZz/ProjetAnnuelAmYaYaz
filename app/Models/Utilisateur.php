@@ -23,11 +23,10 @@ class Utilisateur extends Authenticatable
         'ville',
         'code_postal',
         'type_utilisateur',
+        'actif',
     ];
 
-    /**
-     * Utilise le champ "mot_de_passe" pour l'authentification
-     */
+    /** utilise le champms mdp pour la connection */
     public function getAuthPassword()
     {
         return $this->mot_de_passe;

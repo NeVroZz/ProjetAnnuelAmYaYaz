@@ -20,12 +20,19 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Rôle</th>
+                    <th>Statut</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($utilisateurs as $utilisateur)
                 <tr>
+                    <td>
+                        <span class="badge bg-{{ $utilisateur->actif ? 'success' : 'secondary' }}">
+                            {{ $utilisateur->actif ? 'Actif' : 'Inactif' }}
+                        </span>
+                    </td>
+
                     <td>{{ $utilisateur->id_utilisateur }}</td>
                     <td>{{ $utilisateur->nom }}</td>
                     <td>{{ $utilisateur->prenom }}</td>
@@ -52,6 +59,15 @@
                                     @method('DELETE')
                                     <button class="dropdown-item text-danger">Supprimer</button>
                                 </form></li>
+
+                                <form action="{{ route('utilisateurs.toggle', $utilisateur->id_utilisateur) }}" method="POST" onsubmit="return confirm('Changer l’état de cet utilisateur ?')">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="dropdown-item">
+                                        {{ $utilisateur->actif ? 'Désactiver' : 'Activer' }}
+                                    </button>
+                                </form>
+
                             </ul>
                         </div>
                     </td>
