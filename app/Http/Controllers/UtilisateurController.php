@@ -13,15 +13,35 @@ class UtilisateurController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
-        $utilisateurs = Utilisateur::where('nom', 'LIKE', "%$search%")
-            ->orWhere('prenom', 'LIKE', "%$search%")
-            ->orWhere('email', 'LIKE', "%$search%")
-            ->orWhere('type_utilisateur', 'LIKE', "%$search%")
-            ->paginate(10);
-
-        return view('utilisateurs.index', compact('utilisateurs', 'search'));
+        $role = $request->input('role');
+        $showInactive = $request->boolean('show_inactive', false);
+    
+        $query = Utilisateur::query();
+    
+        // Recherche
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'LIKE', "%$search%")
+                  ->orWhere('prenom', 'LIKE', "%$search%")
+                  ->orWhere('email', 'LIKE', "%$search%");
+            });
+        }
+    
+        // Filtrage par rôle
+        if ($role && $role !== 'all') {
+            $query->where('type_utilisateur', $role);
+        }
+    
+        // Filtrage par statut actif
+        if (!$showInactive) {
+            $query->where('actif', true);
+        }
+    
+        $utilisateurs = $query->paginate(10)->withQueryString();
+    
+        return view('utilisateurs.index', compact('utilisateurs', 'search', 'role', 'showInactive'));
     }
+    
 
     /**
      * Supprime un utilisateur.

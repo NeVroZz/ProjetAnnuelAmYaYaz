@@ -5,10 +5,26 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>User Management</h2>
-        <form method="GET" action="{{ route('utilisateurs.index') }}" class="d-flex" role="search">
-            <input type="text" name="search" class="form-control me-2" placeholder="Search users..." value="{{ request('search') }}">
-            <button class="btn btn-primary">Apply Filters</button>
-        </form>
+            <<form method="GET" action="{{ route('utilisateurs.index') }}" class="d-flex gap-2 align-items-center" role="search">
+                <input type="text" name="search" class="form-control" placeholder="Search users..." value="{{ request('search') }}">
+
+                <select name="role" class="form-select">
+                    <option value="all">Tous les rôles</option>
+                    <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="client" {{ request('role') === 'client' ? 'selected' : '' }}>Client</option>
+                    <option value="commercant" {{ request('role') === 'commercant' ? 'selected' : '' }}>Commerçant</option>
+                    <option value="livreur" {{ request('role') === 'livreur' ? 'selected' : '' }}>Livreur</option>
+                    <option value="prestataire" {{ request('role') === 'prestataire' ? 'selected' : '' }}>Prestataire</option>
+                </select>
+
+                <div class="form-check ms-2">
+                    <input class="form-check-input" type="checkbox" name="show_inactive" value="1" {{ request('show_inactive') ? 'checked' : '' }}>
+                    <label class="form-check-label">Inclure inactifs</label>
+                </div>
+
+                <button class="btn btn-primary">Filtrer</button>
+            </form>
+
     </div>
 
     <div class="table-responsive bg-white p-3 rounded shadow-sm">
