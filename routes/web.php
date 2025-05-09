@@ -5,6 +5,9 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UtilisateurController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LogConnexionController;
+use App\Http\Controllers\LogModificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,8 +53,18 @@ Route::put('/utilisateurs/{id}', [UtilisateurController::class, 'update'])->name
 
 Route::patch('/utilisateurs/{id}/activation', [UtilisateurController::class, 'toggleActivation'])->name('utilisateurs.toggle');
 
-Route::get('/logs', [\App\Http\Controllers\LogConnexionController::class, 'index'])
-    ->middleware('auth')->name('logs.index');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
+
+// Historique des connexions
+Route::get('/logs', [LogConnexionController::class, 'index'])->name('logs.index')->middleware('auth');
+
+// Historique des modifications
+Route::get('/modifications', [LogModificationController::class, 'index'])->name('modifications.index')->middleware('auth');
+
 
 // Commenté car on n'utilise plus les routes Inertia d'authentification
 // require __DIR__.'/auth.php';

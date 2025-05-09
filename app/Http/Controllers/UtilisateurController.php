@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Utilisateur;
+use App\Models\LogModification;
+use Illuminate\Support\Facades\Auth;
 
 class UtilisateurController extends Controller
 {
@@ -81,6 +83,13 @@ class UtilisateurController extends Controller
         }
 
         $utilisateur->update($validated);
+
+        LogModification::create([
+            'admin_id' => Auth::id(),
+            'utilisateur_id' => $utilisateur->id_utilisateur,
+            'action' => 'Modification utilisateur',
+            'details' => 'L’utilisateur ' . $utilisateur->prenom . ' ' . $utilisateur->nom . ' a été modifié.'
+        ]);
 
         return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
     }

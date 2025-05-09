@@ -50,7 +50,9 @@
         <h5 class="text-center mb-4">EcoDeli Admin</h5>
         <a href="{{ route('dashboard') }}">📊 Dashboard</a>
         <a href="{{ route('utilisateurs.index') }}">👤 Utilisateurs</a>
-        <a href="{{ route('logs.index') }}">🕒 Connexions</a>
+        <a href="{{ route('logs.index') }}">🔍 Connexions</a>
+        <a href="{{ route('modifications.index') }}">🛠️ Modifications</a>
+
         <!-- Ajoute d'autres liens ici si besoin -->
         <form action="{{ route('logout') }}" method="POST" class="mt-4 text-center">
             @csrf
