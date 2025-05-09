@@ -65,10 +65,10 @@ class UtilisateurController extends Controller
         $utilisateur = Utilisateur::findOrFail($id);
 
         $validated = $request->validate([
-            'nom' => 'required|string|max:100',
-            'prenom' => 'required|string|max:100',
-            'email' => 'required|email|unique:utilisateurs,email,' . $id . ',id_utilisateur',
-            'mot_de_passe' => 'nullable|min:6',
+            'nom' => 'nullable|string|max:100',
+            'prenom' => 'nullable|string|max:100',
+            'email' => 'nullable|email|max:255',
+            'mot_de_passe' => 'nullable|string|min:6',
             'telephone' => 'nullable|string|max:20',
             'adresse' => 'nullable|string',
             'ville' => 'nullable|string|max:100',
@@ -76,20 +76,26 @@ class UtilisateurController extends Controller
             'type_utilisateur' => 'required|in:client,livreur,commercant,prestataire,admin',
         ]);
 
-        if ($request->filled('mot_de_passe')) {
-            $validated['mot_de_passe'] = bcrypt($request->mot_de_passe);
-        } else {
-            unset($validated['mot_de_passe']);
+        $modifications = [];
+
+        foreach ($validated as $key => $value) {
+            if ($utilisateur->$key !== $value && $value !== null) {
+                $modifications[] = "Champ `{$key}` : `{$utilisateur->$key}` → `{$value}`";
+                $utilisateur->$key = $value;
+            }
         }
 
-        $utilisateur->update($validated);
+        if (!empty($modifications)) {
+            $utilisateur->save();
 
-        LogModification::create([
-            'admin_id' => Auth::id(),
-            'utilisateur_id' => $utilisateur->id_utilisateur,
-            'action' => 'Modification utilisateur',
-            'details' => 'L’utilisateur ' . $utilisateur->prenom . ' ' . $utilisateur->nom . ' a été modifié.'
-        ]);
+            // Enregistrement dans le log
+            LogModification::create([
+                'admin_id' => Auth::id(),
+                'utilisateur_id' => $id,
+                'action' => 'Modification utilisateur',
+                'details' => implode(", ", $modifications),
+            ]);
+        }
 
         return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
     }
