@@ -30,7 +30,7 @@ class UtilisateurController extends Controller
             });
         }
 
-        if ($verifie !== null && verifie !== 'all') {
+        if ($verifie !== null && $verifie !== 'all') {
             $query->where('verifie', $verifie);
         }
         // Filtrage par vérification

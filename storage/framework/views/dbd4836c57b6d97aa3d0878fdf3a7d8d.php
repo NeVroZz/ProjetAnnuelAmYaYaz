@@ -15,6 +15,12 @@
                     <option value="prestataire" <?php echo e(request('role') === 'prestataire' ? 'selected' : ''); ?>>Prestataire</option>
                 </select>
 
+                    <select name="verifie" class="form-select">
+                        <option value="all">Tous</option>
+                        <option value="1" <?php echo e(request('verifie') === '1' ? 'selected' : ''); ?>>Vérifiés</option>
+                        <option value="0" <?php echo e(request('verifie') === '0' ? 'selected' : ''); ?>>Non vérifiés</option>
+                    </select>
+
                 <div class="form-check ms-2">
                     <input class="form-check-input" type="checkbox" name="show_inactive" value="1" <?php echo e(request('show_inactive') ? 'checked' : ''); ?>>
                     <label class="form-check-label">Inclure inactifs</label>
