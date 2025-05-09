@@ -102,9 +102,20 @@ class UtilisateurController extends Controller
 
     public function toggleActivation($id)
     {
-        $user = Utilisateur::findOrFail($id);
-        $user->actif = !$user->actif;
-        $user->save();
+        $utilisateur = Utilisateur::findOrFail($id);
+        $utilisateur->actif = !$utilisateur->actif;
+        $utilisateur->save();
+
+        // Déterminer l'action effectuée
+        $action = $utilisateur->actif ? 'Activé' : 'Désactivé';
+
+        // Ajouter le log de modification
+        \App\Models\LogModification::create([
+            'admin_id' => auth()->id(),
+            'utilisateur_id' => $id,
+            'action' => $action . ' d\'un compte',
+            'details' => 'Le compte de ' . $utilisateur->prenom . ' ' . $utilisateur->nom . ' a été ' . strtolower($action) . '.',
+        ]);
 
         return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
     }
