@@ -39,4 +39,23 @@
         </ul>
     </div>
 
+    <div class="bg-white p-3 rounded shadow mb-4">
+        <h4>Utilisateurs non vérifiés</h4>
+        <ul class="list-group">
+            @foreach($utilisateursNonVerifies as $user)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ $user->prenom }} {{ $user->nom }} - {{ $user->email }}
+                    <form action="{{ route('utilisateurs.verification', $user->id_utilisateur) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button class="btn btn-sm btn-success">Vérifier</button>
+                    </form>
+
+
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
+
 @endsection

@@ -42,12 +42,19 @@
                     <th>Email</th>
                     <th>Rôle</th>
                     <th>Statut</th>
+                    <th>Vérification</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($utilisateurs as $utilisateur)
                 <tr>
+                    <td>
+                        <span class="badge bg-{{ $utilisateur->verifie ? 'success' : 'secondary' }}">
+                            {{ $utilisateur->verifie ? 'Vérifié' : 'Non vérifié' }}
+                        </span>
+                    </td>
+
                     <td>
                         <span class="badge bg-{{ $utilisateur->actif ? 'success' : 'secondary' }}">
                             {{ $utilisateur->actif ? 'Actif' : 'Inactif' }}
@@ -80,6 +87,16 @@
                                     @method('DELETE')
                                     <button class="dropdown-item text-danger">Supprimer</button>
                                 </form></li>
+
+                                <form action="{{ route('utilisateurs.toggleVerification', $utilisateur->id_utilisateur) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="dropdown-item">
+                                        {{ $utilisateur->verifie ? 'Annuler vérification' : 'Vérifier' }}
+                                    </button>
+                                </form>
+
+
 
                                 <form action="{{ route('utilisateurs.toggle', $utilisateur->id_utilisateur) }}" method="POST" onsubmit="return confirm('Changer l’état de cet utilisateur ?')">
                                     @csrf

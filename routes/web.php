@@ -51,7 +51,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/utilisateurs/{id}/edit', [UtilisateurController::class, 'edit'])->name('utilisateurs.edit');
 Route::put('/utilisateurs/{id}', [UtilisateurController::class, 'update'])->name('utilisateurs.update');
 
-Route::patch('/utilisateurs/{id}/activation', [UtilisateurController::class, 'toggleActivation'])->name('utilisateurs.toggle');
+Route::patch('/utilisateurs/{id}/verification', [UtilisateurController::class, 'verify'])->name('utilisateurs.verification');
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -65,6 +65,8 @@ Route::get('/logs', [LogConnexionController::class, 'index'])->name('logs.index'
 // Historique des modifications
 Route::get('/modifications', [LogModificationController::class, 'index'])->name('modifications.index')->middleware('auth');
 
+Route::patch('/utilisateurs/{id}/toggle-verification', [UtilisateurController::class, 'toggleVerification'])->name('utilisateurs.toggleVerification');
+Route::patch('/utilisateurs/{id}/activation', [UtilisateurController::class, 'toggleActivation'])->name('utilisateurs.toggle');
 
 // Commenté car on n'utilise plus les routes Inertia d'authentification
 // require __DIR__.'/auth.php';

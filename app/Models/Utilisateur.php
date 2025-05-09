@@ -24,6 +24,7 @@ class Utilisateur extends Authenticatable
         'code_postal',
         'type_utilisateur',
         'actif',
+        'verifie'
     ];
 
     /** utilise le champms mdp pour la connection */

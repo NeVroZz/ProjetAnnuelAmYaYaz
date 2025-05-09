@@ -22,6 +22,9 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard', compact('totalUsers', 'usersByRole', 'recentLogs'));
+        $utilisateursNonVerifies = Utilisateur::where('verifie', false)->limit(5)->get();
+
+        return view('dashboard', compact('totalUsers', 'usersByRole', 'recentLogs', 'utilisateursNonVerifies'));
     }
+
 }

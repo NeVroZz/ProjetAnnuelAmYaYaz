@@ -15,6 +15,7 @@ class UtilisateurController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $verifie = $request->input('verifie');
         $role = $request->input('role');
         $showInactive = $request->boolean('show_inactive', false);
     
@@ -28,6 +29,11 @@ class UtilisateurController extends Controller
                   ->orWhere('email', 'LIKE', "%$search%");
             });
         }
+
+        if ($verifie !== null && verifie !== 'all') {
+            $query->where('verifie', $verifie);
+        }
+        // Filtrage par vérification
     
         // Filtrage par rôle
         if ($role && $role !== 'all') {
@@ -41,7 +47,7 @@ class UtilisateurController extends Controller
     
         $utilisateurs = $query->paginate(10)->withQueryString();
     
-        return view('utilisateurs.index', compact('utilisateurs', 'search', 'role', 'showInactive'));
+        return view('utilisateurs.index', compact('utilisateurs', 'search', 'role', 'showInactive', 'verifie'));
     }
     
 
@@ -119,6 +125,41 @@ class UtilisateurController extends Controller
 
         return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
     }
+
+    public function toggleVerification($id)
+    {
+        $utilisateur = Utilisateur::findOrFail($id);
+        $utilisateur->verifie = !$utilisateur->verifie;
+        $utilisateur->save();
+
+        // Log de la vérification
+        \App\Models\LogModification::create([
+            'admin_id' => auth()->id(),
+            'utilisateur_id' => $id,
+            'action' => $utilisateur->verifie ? 'Compte vérifié' : 'Compte non vérifié',
+            'details' => 'Le compte de ' . $utilisateur->prenom . ' ' . $utilisateur->nom . ' a été ' . ($utilisateur->verifie ? 'vérifié' : 'désactivé'),
+        ]);
+
+        return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour.');
+    }
+
+public function verify($id)
+    {
+        $utilisateur = Utilisateur::findOrFail($id);
+        $utilisateur->verifie = true;
+        $utilisateur->save();
+
+        // Ajouter un log de modification
+        LogModification::create([
+            'admin_id' => auth()->id(),
+            'utilisateur_id' => $id,
+            'action' => 'Vérification',
+            'details' => "Le compte de {$utilisateur->prenom} {$utilisateur->nom} a été vérifié.",
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Utilisateur vérifié.');
+    }
+
 
 
 

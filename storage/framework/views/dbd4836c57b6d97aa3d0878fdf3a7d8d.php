@@ -40,12 +40,20 @@
                     <th>Email</th>
                     <th>Rôle</th>
                     <th>Statut</th>
+                    <th>Vérification</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php $__currentLoopData = $utilisateurs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $utilisateur): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
+                    <td>
+                        <span class="badge bg-<?php echo e($utilisateur->verifie ? 'success' : 'secondary'); ?>">
+                            <?php echo e($utilisateur->verifie ? 'Vérifié' : 'Non vérifié'); ?>
+
+                        </span>
+                    </td>
+
                     <td>
                         <span class="badge bg-<?php echo e($utilisateur->actif ? 'success' : 'secondary'); ?>">
                             <?php echo e($utilisateur->actif ? 'Actif' : 'Inactif'); ?>
@@ -78,6 +86,17 @@
                                     <?php echo method_field('DELETE'); ?>
                                     <button class="dropdown-item text-danger">Supprimer</button>
                                 </form></li>
+
+                                <form action="<?php echo e(route('utilisateurs.toggleVerification', $utilisateur->id_utilisateur)); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PATCH'); ?>
+                                    <button class="dropdown-item">
+                                        <?php echo e($utilisateur->verifie ? 'Annuler vérification' : 'Vérifier'); ?>
+
+                                    </button>
+                                </form>
+
+
 
                                 <form action="<?php echo e(route('utilisateurs.toggle', $utilisateur->id_utilisateur)); ?>" method="POST" onsubmit="return confirm('Changer l’état de cet utilisateur ?')">
                                     <?php echo csrf_field(); ?>
