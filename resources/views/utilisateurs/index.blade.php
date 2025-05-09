@@ -5,7 +5,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>User Management</h2>
-            <<form method="GET" action="{{ route('utilisateurs.index') }}" class="d-flex gap-2 align-items-center" role="search">
+        <form method="GET" action="{{ route('utilisateurs.index') }}" class="d-flex flex-wrap gap-2 align-items-center" role="search">
                 <input type="text" name="search" class="form-control" placeholder="Search users..." value="{{ request('search') }}">
 
                 <select name="role" class="form-select">
@@ -22,8 +22,13 @@
                     <label class="form-check-label">Inclure inactifs</label>
                 </div>
 
-                <button class="btn btn-primary">Filtrer</button>
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+
+                <a href="{{ route('utilisateurs.index') }}" class="btn btn-outline-secondary">
+                    Réinitialiser
+                </a>
             </form>
+
 
     </div>
 

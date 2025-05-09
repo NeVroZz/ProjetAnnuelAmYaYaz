@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\LogConnexion;
 
 class LoginController extends Controller
 {
@@ -28,6 +29,13 @@ class LoginController extends Controller
     // Vérifie d'abord si l'utilisateur existe
     if (Auth::attempt($userCredentials, $request->remember)) {
         $request->session()->regenerate();
+
+        LogConnexion::create([
+            'utilisateur_id' => auth()->user()->id_utilisateur,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
 
         // Puis vérifie si c'est bien un admin
         if (Auth::user()->type_utilisateur !== 'admin') {

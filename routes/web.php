@@ -50,5 +50,8 @@ Route::put('/utilisateurs/{id}', [UtilisateurController::class, 'update'])->name
 
 Route::patch('/utilisateurs/{id}/activation', [UtilisateurController::class, 'toggleActivation'])->name('utilisateurs.toggle');
 
+Route::get('/logs', [\App\Http\Controllers\LogConnexionController::class, 'index'])
+    ->middleware('auth')->name('logs.index');
+
 // Commenté car on n'utilise plus les routes Inertia d'authentification
 // require __DIR__.'/auth.php';
