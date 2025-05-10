@@ -42,13 +42,13 @@
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
+                    <th>Vérification</th>
+                    <th>Statut</th>
                     <th>ID</th>
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Rôle</th>
-                    <th>Statut</th>
-                    <th>Vérification</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -81,37 +81,41 @@
                             {{ ucfirst($utilisateur->type_utilisateur) }}
                         </span>
                     </td>
+
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                 Actions
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('utilisateurs.edit', $utilisateur->id_utilisateur) }}">Modifier</a></li>
-                                <li><form action="{{ route('utilisateurs.destroy', $utilisateur->id_utilisateur) }}" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="dropdown-item text-danger">Supprimer</button>
-                                </form></li>
-
-                                <form action="{{ route('utilisateurs.toggleVerification', $utilisateur->id_utilisateur) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="dropdown-item">
-                                        {{ $utilisateur->verifie ? 'Annuler vérification' : 'Vérifier' }}
-                                    </button>
-                                </form>
-
-
-
-                                <form action="{{ route('utilisateurs.toggle', $utilisateur->id_utilisateur) }}" method="POST" onsubmit="return confirm('Changer l’état de cet utilisateur ?')">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="dropdown-item">
-                                        {{ $utilisateur->actif ? 'Désactiver' : 'Activer' }}
-                                    </button>
-                                </form>
-
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('utilisateurs.edit', $utilisateur->id_utilisateur) }}">Modifier</a>
+                                </li>
+                                <li>
+                                    <form action="{{ route('utilisateurs.destroy', $utilisateur->id_utilisateur) }}" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="dropdown-item text-danger">Supprimer</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ route('utilisateurs.toggleVerification', $utilisateur->id_utilisateur) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button class="dropdown-item">
+                                            {{ $utilisateur->verifie ? 'Annuler vérification' : 'Vérifier' }}
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ route('utilisateurs.toggle', $utilisateur->id_utilisateur) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button class="dropdown-item">
+                                            {{ $utilisateur->actif ? 'Désactiver' : 'Activer' }}
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </td>
@@ -124,4 +128,5 @@
             {{ $utilisateurs->links('pagination::bootstrap-5') }}
         </div>
     </div>
+
 @endsection

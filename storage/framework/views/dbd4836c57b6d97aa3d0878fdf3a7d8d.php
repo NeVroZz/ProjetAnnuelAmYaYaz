@@ -40,13 +40,13 @@
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
+                    <th>Vérification</th>
+                    <th>Statut</th>
                     <th>ID</th>
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Rôle</th>
-                    <th>Statut</th>
-                    <th>Vérification</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -80,39 +80,43 @@
 
                         </span>
                     </td>
+
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                 Actions
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<?php echo e(route('utilisateurs.edit', $utilisateur->id_utilisateur)); ?>">Modifier</a></li>
-                                <li><form action="<?php echo e(route('utilisateurs.destroy', $utilisateur->id_utilisateur)); ?>" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?')">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('DELETE'); ?>
-                                    <button class="dropdown-item text-danger">Supprimer</button>
-                                </form></li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo e(route('utilisateurs.edit', $utilisateur->id_utilisateur)); ?>">Modifier</a>
+                                </li>
+                                <li>
+                                    <form action="<?php echo e(route('utilisateurs.destroy', $utilisateur->id_utilisateur)); ?>" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?')">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
+                                        <button class="dropdown-item text-danger">Supprimer</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="<?php echo e(route('utilisateurs.toggleVerification', $utilisateur->id_utilisateur)); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('PATCH'); ?>
+                                        <button class="dropdown-item">
+                                            <?php echo e($utilisateur->verifie ? 'Annuler vérification' : 'Vérifier'); ?>
 
-                                <form action="<?php echo e(route('utilisateurs.toggleVerification', $utilisateur->id_utilisateur)); ?>" method="POST">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('PATCH'); ?>
-                                    <button class="dropdown-item">
-                                        <?php echo e($utilisateur->verifie ? 'Annuler vérification' : 'Vérifier'); ?>
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="<?php echo e(route('utilisateurs.toggle', $utilisateur->id_utilisateur)); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('PATCH'); ?>
+                                        <button class="dropdown-item">
+                                            <?php echo e($utilisateur->actif ? 'Désactiver' : 'Activer'); ?>
 
-                                    </button>
-                                </form>
-
-
-
-                                <form action="<?php echo e(route('utilisateurs.toggle', $utilisateur->id_utilisateur)); ?>" method="POST" onsubmit="return confirm('Changer l’état de cet utilisateur ?')">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('PATCH'); ?>
-                                    <button class="dropdown-item">
-                                        <?php echo e($utilisateur->actif ? 'Désactiver' : 'Activer'); ?>
-
-                                    </button>
-                                </form>
-
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </td>
@@ -126,6 +130,7 @@
 
         </div>
     </div>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\code\test\resources\views/utilisateurs/index.blade.php ENDPATH**/ ?>
